@@ -2,13 +2,16 @@ package org.macro.keys;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.macro.tool.ButtonTool;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import java.util.Locale;
 
 @Getter
 @RequiredArgsConstructor
-public enum Alpha {
+public enum Alpha implements ButtonTool {
     A(KeyEvent.VK_A, 'a'),
     B(KeyEvent.VK_B, 'b'),
     C(KeyEvent.VK_C, 'c'),
@@ -39,16 +42,19 @@ public enum Alpha {
     private final int key;
     private final char c;
 
-    public void check(Robot robot) {
+    @Override
+    public void click(Robot robot) {
         robot.keyPress(this.getKey());
-        robot.delay(1);
+        robot.delay(robot.getAutoDelay());
         robot.keyRelease(this.getKey());
     }
 
+    @Override
     public void press(Robot robot) {
         robot.keyPress(this.getKey());
     }
 
+    @Override
     public void release(Robot robot) {
         robot.keyRelease(this.getKey());
     }
@@ -56,12 +62,21 @@ public enum Alpha {
     public void upper(Robot robot) {
         robot.keyPress(KeyEvent.VK_SHIFT);
         robot.keyPress(this.getKey());
-        robot.delay(1);
+        robot.delay(robot.getAutoDelay());
         robot.keyRelease(this.getKey());
         robot.keyRelease(KeyEvent.VK_SHIFT);
     }
 
-    public void word(Robot robot, String word) {
-        word.chars().filter(Character::isLowerCase).forEach(v -> {});
+    public static void word(Robot robot, String word) {
+        word.toUpperCase(Locale.ROOT)
+                .chars()
+                .filter(Character::isUpperCase)
+                .mapToObj(Character::toString)
+                .map(Alpha::valueOf)
+                .forEach(v -> v.press(robot));
+    }
+
+    public static boolean isAlpha(char c) {
+        return Character.isAlphabetic(c);
     }
 }
