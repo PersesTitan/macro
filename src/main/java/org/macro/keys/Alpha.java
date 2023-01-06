@@ -6,7 +6,6 @@ import org.macro.tool.ButtonTool;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
 import java.util.Locale;
 
 @Getter
@@ -44,19 +43,19 @@ public enum Alpha implements ButtonTool {
 
     @Override
     public void click(Robot robot) {
-        robot.keyPress(this.getKey());
+        robot.keyPress(key);
         robot.delay(robot.getAutoDelay());
-        robot.keyRelease(this.getKey());
+        robot.keyRelease(key);
     }
 
     @Override
     public void press(Robot robot) {
-        robot.keyPress(this.getKey());
+        robot.keyPress(key);
     }
 
     @Override
     public void release(Robot robot) {
-        robot.keyRelease(this.getKey());
+        robot.keyRelease(key);
     }
 
     public void upper(Robot robot) {
